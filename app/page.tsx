@@ -101,6 +101,10 @@ export default function Page() {
             <HeartPulse size={26} />
             <span className="text-lg font-bold tracking-tight">ORU <small className="text-sm font-normal text-[#3f4947]">FemTech</small></span>
           </a>
+          <form className="relative hidden w-64 xl:block" role="search" onSubmit={(e) => { e.preventDefault(); document.getElementById('domains')?.scrollIntoView({ behavior: 'smooth' }) }}>
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7978]" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search health topics, clinical guides…" aria-label="Search health topics and clinical guides" className="h-10 w-full rounded-lg bg-[#e0f1f5] pl-9 pr-3 text-[13px] outline-none placeholder:text-[#6f7978] focus:ring-2 focus:ring-[#0d5c58]" />
+          </form>
           <nav className="hidden items-center gap-1 text-[13px] font-medium lg:flex" aria-label="Primary">
             <a href="#top" aria-current="page" className="rounded-lg bg-[#0d5c58] px-3 py-2 font-semibold text-white">Health Hub</a>
             <a href="#providers" className="rounded-lg px-3 py-2 text-[#3f4947] hover:bg-[#e0f1f5]">Provider Directory</a>
@@ -191,12 +195,12 @@ export default function Page() {
           {/* Quick cards */}
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: <Stethoscope size={20} />, title: 'Verified Providers', text: '1,420+ HPCSA & board-certified specialists across provinces.', cta: 'Search Registry', href: '#providers' },
-              { icon: <BookOpen size={20} />, title: 'Peer-Reviewed Guides', text: '380+ guides reviewed by accredited OB-GYNs & midwives.', cta: 'Browse EdTech', href: '#guides' },
-              { icon: <Bot size={20} />, title: 'AI Care Assistant', text: 'Safe RAG-bounded navigation with strict non-diagnostic protocol.', cta: 'Start Triage', href: '#ai-navigator' },
-              { icon: <Siren size={20} />, title: 'Emergency Hotlines', text: 'Maternal crises, poison control and SA ambulance dispatch.', cta: 'Call SA 112 / 10177', href: 'tel:112' },
+              { icon: <Stethoscope size={20} />, title: 'Verified Providers', text: '1,420+ HPCSA & board-certified specialists across provinces.', cta: 'Search Registry', href: '#providers', tone: '' },
+              { icon: <BookOpen size={20} />, title: 'Peer-Reviewed Guides', text: '380+ guides reviewed by accredited OB-GYNs & midwives.', cta: 'Browse EdTech', href: '#guides', tone: '' },
+              { icon: <Bot size={20} />, title: 'AI Care Assistant', text: 'Safe RAG-bounded navigation with strict non-diagnostic protocol.', cta: 'Start Triage', href: '#ai-navigator', tone: '' },
+              { icon: <Siren size={20} />, title: 'Emergency Hotlines', text: 'Maternal crises, poison control and SA ambulance dispatch.', cta: 'Call SA 112 / 10177', href: 'tel:112', tone: 'bg-[#fdf3f3] border-[#ffb4ac]' },
             ].map((c) => (
-              <div key={c.title} className="rounded-xl border border-[#d5e5e9] bg-white p-5">
+              <div key={c.title} className={`rounded-xl border border-[#d5e5e9] bg-white p-5 ${c.tone}`}>
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#daebef] text-[#004340]">{c.icon}</span>
                 <h3 className="mt-3 font-bold">{c.title}</h3>
                 <p className="mt-1 text-[13px] leading-6 text-[#3f4947]">{c.text}</p>
@@ -257,15 +261,23 @@ export default function Page() {
           </div>
           <div className="mt-6 grid gap-5 lg:grid-cols-3">
             {guides.map((g) => (
-              <article key={g.title} className="flex flex-col rounded-xl border border-[#d5e5e9] bg-white p-6 shadow-sm">
+              <article key={g.title} className="flex flex-col overflow-hidden rounded-xl border border-[#d5e5e9] bg-white shadow-sm">
+                <div className="flex h-36 items-center justify-center bg-gradient-to-br from-[#e0f1f5] via-[#daebef] to-[#abefe9]/60" role="img" aria-label={`${g.category} guide illustration placeholder`}>
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-[#0d5c58] shadow-sm"><BookOpen size={26} /></span>
+                </div>
+                <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-center justify-between text-xs">
                   <span className="rounded-full bg-[#e6f7fa] px-2.5 py-1 font-bold text-[#004340]">{g.category}</span>
                   <span className="inline-flex items-center gap-1 text-[#6f7978]"><Clock3 size={13} /> {g.time}</span>
                 </div>
                 <h3 className="mt-3 text-lg font-bold leading-snug">{g.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-6 text-[#3f4947]">{g.summary}</p>
-                <p className="mt-4 flex items-start gap-1.5 border-t border-[#e6f7fa] pt-3 text-xs leading-5 text-[#3f4947]"><BadgeCheck size={14} className="mt-0.5 shrink-0 text-[#128a58]" /> {g.reviewer}<br />{g.ref}</p>
+                <div className="mt-4 border-t border-[#e6f7fa] pt-3 text-xs leading-5 text-[#3f4947]">
+                  <p className="flex items-start gap-1.5"><BadgeCheck size={14} className="mt-0.5 shrink-0 text-[#128a58]" /> {g.reviewer}</p>
+                  <p className="mt-0.5 pl-5 text-[#6f7978]">{g.ref}</p>
+                </div>
                 <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-[#004340]">Read Guide <ArrowRight size={15} /></span>
+                </div>
               </article>
             ))}
           </div>
@@ -317,7 +329,8 @@ export default function Page() {
             {providers.map((p) => (
               <article key={p.name} className="flex flex-col rounded-xl border border-[#d5e5e9] bg-white p-6">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0d5c58] font-bold text-white">{p.name.replace('Sr. ', '').replace('Dr. ', '').charAt(0)}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/placeholder-user.jpg" alt="" className="h-11 w-11 rounded-full bg-[#daebef] object-cover ring-1 ring-[#d5e5e9]" />
                   <div>
                     <h3 className="font-bold leading-tight">{p.name}</h3>
                     <p className="text-xs text-[#3f4947]">{p.role}</p>
