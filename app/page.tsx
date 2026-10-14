@@ -1,135 +1,41 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import {
-  ArrowRight,
-  BookOpen,
-  CheckCircle2,
-  ChevronDown,
-  Clock3,
-  HeartPulse,
-  Menu,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  X,
-} from 'lucide-react'
+import { ArrowRight, BookOpen, CheckCircle2, Clock3, HeartPulse, Menu, Search, ShieldCheck, Stethoscope, X } from 'lucide-react'
 
-const categories = [
-  { label: 'Menstrual health', count: '12 resources', icon: HeartPulse, tone: 'rose' },
-  { label: 'Pregnancy & maternal wellbeing', count: '8 resources', icon: Sparkles, tone: 'peach' },
-  { label: 'Fertility & IVF', count: '6 resources', icon: CheckCircle2, tone: 'sage' },
-  { label: 'Mental wellbeing', count: '9 resources', icon: ShieldCheck, tone: 'lavender' },
+const topics = [
+  ['Gynecology & reproductive health', '54 guides', 'Cervical screening, STI prevention, pelvic health and exam preparation.'],
+  ['Fertility & IVF', '32 guides', 'Evidence-led information for planning, treatment and support.'],
+  ['Maternal & newborn care', '41 guides', 'Pregnancy, birth and postpartum pathways for every stage.'],
+  ['Menstrual health & PCOS', '38 guides', 'Understand cycles, symptoms, hormones and when to seek care.'],
+  ['Mental wellbeing', '27 guides', 'Compassionate support for anxiety, mood and life transitions.'],
+  ['Menopause & mature health', '29 guides', 'Practical guidance for perimenopause and beyond.'],
 ]
 
 const resources = [
-  {
-    title: 'Understanding your menstrual cycle',
-    category: 'Menstrual health',
-    summary: 'A clear, supportive guide to cycle changes, common symptoms and when to ask for help.',
-    readTime: '6 min read',
-    reviewed: 'Reviewed 12 Sep 2026',
-    tag: 'Featured guide',
-  },
-  {
-    title: 'A gentle guide to preparing for pregnancy',
-    category: 'Fertility & IVF',
-    summary: 'Practical information to help you prepare questions and make informed next-step choices.',
-    readTime: '8 min read',
-    reviewed: 'Reviewed 08 Aug 2026',
-    tag: 'Planning ahead',
-  },
-  {
-    title: 'Caring for your wellbeing after birth',
-    category: 'Pregnancy & maternal wellbeing',
-    summary: 'Learn about emotional and physical changes in the postpartum period, with trusted pathways to care.',
-    readTime: '7 min read',
-    reviewed: 'Reviewed 22 Jul 2026',
-    tag: 'New parent support',
-  },
+  { title: 'Understanding your menstrual cycle', topic: 'Menstrual health & PCOS', summary: 'A clear guide to cycle changes, common symptoms and when to ask for help.', time: '6 min read' },
+  { title: 'Preparing for your first gynecology visit', topic: 'Gynecology & reproductive health', summary: 'Know what to expect, what to ask and how to feel more prepared for care.', time: '5 min read' },
+  { title: 'A gentle guide to preparing for pregnancy', topic: 'Fertility & IVF', summary: 'Practical information to help you prepare questions and choose next steps.', time: '8 min read' },
 ]
 
 export default function Page() {
   const [query, setQuery] = useState('')
-  const [activeCategory, setActiveCategory] = useState('All topics')
+  const [topic, setTopic] = useState('All topics')
   const [menuOpen, setMenuOpen] = useState(false)
-
-  const filteredResources = useMemo(() => {
-    const normalized = query.toLowerCase().trim()
-    return resources.filter((resource) => {
-      const matchesCategory = activeCategory === 'All topics' || resource.category === activeCategory
-      const matchesQuery = !normalized || `${resource.title} ${resource.summary} ${resource.category}`.toLowerCase().includes(normalized)
-      return matchesCategory && matchesQuery
-    })
-  }, [activeCategory, query])
+  const filtered = useMemo(() => resources.filter((item) => {
+    const text = `${item.title} ${item.topic} ${item.summary}`.toLowerCase()
+    return (topic === 'All topics' || item.topic === topic) && (!query || text.includes(query.toLowerCase()))
+  }), [query, topic])
 
   return (
-    <main className="min-h-screen bg-[#fbfaf7] text-[#24312d]">
-      <div className="border-b border-[#e3e9e4] bg-[#eef6f1] px-4 py-2.5 text-center text-xs font-medium tracking-wide text-[#466157]">
-        This portal shares general health education, not diagnosis or treatment. Always seek qualified professional care for personal concerns.
-      </div>
-
-      <header className="border-b border-[#e7ebe7] bg-[#fbfaf7]/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
-          <a href="#top" className="flex items-center gap-3" aria-label="ORU Social home">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#d76e68] text-lg font-semibold text-white shadow-sm">O</span>
-            <span>
-              <span className="block text-[15px] font-semibold tracking-tight text-[#24312d]">ORU Social</span>
-              <span className="block text-[11px] uppercase tracking-[0.2em] text-[#7c8982]">Women&apos;s health</span>
-            </span>
-          </a>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-[#62716a] md:flex" aria-label="Primary navigation">
-            <a className="text-[#24312d]" href="#explore">Explore topics</a>
-            <a className="transition-colors hover:text-[#24312d]" href="#resources">Resources</a>
-            <a className="transition-colors hover:text-[#24312d]" href="#about">About this portal</a>
-          </nav>
-          <button onClick={() => setMenuOpen(!menuOpen)} className="rounded-xl p-2 text-[#50625a] md:hidden" aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-          <button className="hidden rounded-full border border-[#d9e2dc] bg-white px-4 py-2 text-sm font-semibold text-[#496157] shadow-sm transition hover:border-[#b8ccc0] md:block">Sign in</button>
-        </div>
-        {menuOpen && <nav className="border-t border-[#e7ebe7] px-5 py-4 md:hidden"><div className="flex flex-col gap-4 text-sm font-medium text-[#50625a]"><a href="#explore">Explore topics</a><a href="#resources">Resources</a><a href="#about">About this portal</a></div></nav>}
-      </header>
-
-      <section id="top" className="relative overflow-hidden bg-[#f5efe8]">
-        <div className="absolute -right-16 -top-24 h-72 w-72 rounded-full bg-[#e8c6ba]/35 blur-3xl" />
-        <div className="absolute -bottom-24 left-1/3 h-60 w-60 rounded-full bg-[#d9eadf]/55 blur-3xl" />
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:px-8 lg:py-24">
-          <div className="max-w-2xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#e4d9d0] bg-white/65 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#8b625a]"><span className="h-1.5 w-1.5 rounded-full bg-[#d76e68]" /> A trusted starting point</div>
-            <h1 className="max-w-xl text-4xl font-semibold leading-[1.08] tracking-[-0.04em] text-[#263530] sm:text-5xl lg:text-[4.25rem]">Health information that meets you where you are.</h1>
-            <p className="mt-6 max-w-lg text-lg leading-8 text-[#64716b]">Explore thoughtful, easy-to-understand resources for every stage of your health journey — with clear pathways to professional support.</p>
-            <div className="mt-8 flex flex-wrap gap-3"><a href="#explore" className="inline-flex items-center gap-2 rounded-full bg-[#2e5a4d] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(46,90,77,.16)] transition hover:bg-[#244b40]">Explore topics <ArrowRight size={16} /></a><a href="#resources" className="inline-flex items-center gap-2 rounded-full border border-[#d7d8d1] bg-white/75 px-5 py-3 text-sm font-semibold text-[#496157] transition hover:bg-white">Browse resources</a></div>
-          </div>
-          <div className="relative mx-auto w-full max-w-md lg:justify-self-end">
-            <div className="rounded-[2rem] border border-white/80 bg-white/75 p-3 shadow-[0_24px_70px_rgba(91,74,59,.12)] backdrop-blur-sm">
-              <div className="rounded-[1.5rem] bg-[#dcebe1] p-7 sm:p-9">
-                <div className="flex items-center justify-between"><span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-[#557469]">Your wellbeing matters</span><HeartPulse className="text-[#d76e68]" size={22} /></div>
-                <div className="mt-20 max-w-[230px]"><p className="text-2xl font-semibold leading-tight text-[#31584c]">Small steps can make care feel more possible.</p><p className="mt-3 text-sm leading-6 text-[#60796e]">Find information, prepare questions and choose your next step.</p></div>
-                <div className="mt-10 flex items-center gap-2 text-xs font-medium text-[#557469]"><span className="h-2 w-2 rounded-full bg-[#d76e68]" /> Reviewed health education</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="explore" className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#c36962]">Start here</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-[#283731]">Explore by topic</h2></div><p className="max-w-sm text-sm leading-6 text-[#728079]">Begin with what feels most relevant today. You can always come back to explore more.</p></div>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map(({ label, count, icon: Icon, tone }) => <button key={label} onClick={() => { setActiveCategory(label); document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' }) }} className={`group rounded-2xl border border-[#e4e9e4] bg-white p-5 text-left transition hover:-translate-y-1 hover:border-[#bfd2c6] hover:shadow-[0_12px_30px_rgba(57,83,69,.08)]`}><div className={`flex h-11 w-11 items-center justify-center rounded-xl ${tone === 'rose' ? 'bg-[#f8e6e2] text-[#c66c63]' : tone === 'peach' ? 'bg-[#f7ecdc] text-[#ba8960]' : tone === 'sage' ? 'bg-[#e1efe5] text-[#56806c]' : 'bg-[#eee8f5] text-[#816a9b]'}`}><Icon size={20} /></div><h3 className="mt-5 text-[15px] font-semibold text-[#33463d]">{label}</h3><p className="mt-1 text-xs text-[#87938d]">{count}</p><ArrowRight className="mt-5 text-[#9aa8a0] transition group-hover:translate-x-1 group-hover:text-[#3f6757]" size={17} /></button>)}
-        </div>
-      </section>
-
-      <section id="resources" className="border-y border-[#e6ebe6] bg-white/65">
-        <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"><div><p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#c36962]">Curated for you</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-[#283731]">Helpful, reviewed resources</h2></div><div className="flex flex-col gap-3 sm:flex-row"><label className="relative"><Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#829088]" size={17} /><span className="sr-only">Search resources</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search resources" className="h-11 w-full rounded-xl border border-[#dfe6e0] bg-white pl-10 pr-4 text-sm text-[#33463d] outline-none ring-[#b7d0c0] placeholder:text-[#9aa69f] focus:ring-2 sm:w-64" /></label><div className="relative"><select value={activeCategory} onChange={(event) => setActiveCategory(event.target.value)} className="h-11 w-full appearance-none rounded-xl border border-[#dfe6e0] bg-white pl-4 pr-10 text-sm font-medium text-[#52655b] outline-none focus:ring-2 focus:ring-[#b7d0c0] sm:w-48"><option>All topics</option>{categories.map((category) => <option key={category.label}>{category.label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#829088]" size={16} /></div></div></div>
-          {filteredResources.length > 0 ? <div className="mt-9 grid gap-5 lg:grid-cols-3">{filteredResources.map((resource) => <article key={resource.title} className="flex flex-col rounded-2xl border border-[#e2e8e3] bg-white p-6 shadow-[0_4px_14px_rgba(44,75,57,.03)]"><div className="flex items-center justify-between gap-3"><span className="rounded-full bg-[#eef6f1] px-2.5 py-1 text-[11px] font-semibold text-[#557466]">{resource.tag}</span><span className="text-[#a0aaa4]"><BookOpen size={17} /></span></div><p className="mt-6 text-xs font-semibold uppercase tracking-[0.1em] text-[#c4756e]">{resource.category}</p><h3 className="mt-2 text-xl font-semibold leading-snug tracking-[-0.02em] text-[#33463d]">{resource.title}</h3><p className="mt-3 flex-1 text-sm leading-6 text-[#74817a]">{resource.summary}</p><div className="mt-6 flex items-center justify-between border-t border-[#edf0ed] pt-4 text-xs text-[#87938d]"><span className="flex items-center gap-1.5"><Clock3 size={14} /> {resource.readTime}</span><span>{resource.reviewed}</span></div><button className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#3f6958]">Read resource <ArrowRight size={15} /></button></article>)}</div> : <div className="mt-9 rounded-2xl border border-dashed border-[#cad8ce] bg-[#f7faf7] px-6 py-14 text-center"><Search className="mx-auto text-[#8aa194]" size={24} /><h3 className="mt-4 font-semibold text-[#33463d]">No resources found</h3><p className="mt-2 text-sm text-[#78867e]">Try another search or reset the topic filter.</p><button onClick={() => { setQuery(''); setActiveCategory('All topics') }} className="mt-5 text-sm font-semibold text-[#3f6958] underline underline-offset-4">Reset filters</button></div>}
-        </div>
-      </section>
-
-      <section id="about" className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20"><div className="grid gap-8 rounded-[2rem] bg-[#2e5a4d] p-8 text-white sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center"><div className="max-w-2xl"><div className="flex items-center gap-2 text-sm font-semibold text-[#cfe4d6]"><ShieldCheck size={17} /> Built with care and transparency</div><h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em]">Information should help you feel more informed, not overwhelmed.</h2><p className="mt-4 max-w-xl text-sm leading-6 text-[#d4e4da]">Our resources are designed to be a starting point for conversations with qualified professionals. Each published resource will show its source, review status and date.</p></div><a href="#resources" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#2e5a4d] transition hover:bg-[#eef6f1]">Learn about our approach <ArrowRight size={16} /></a></div></section>
-
-      <footer className="border-t border-[#e4e9e4] px-5 py-8 lg:px-8"><div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#87938d] sm:flex-row sm:items-center sm:justify-between"><p>© 2026 ORU Social. General education, thoughtfully delivered.</p><p>Prototype content shown for product demonstration only.</p></div></footer>
+    <main className="min-h-screen bg-[#eefcff] text-[#0f1e21]">
+      <section className="border-b border-[#d5e5e9] bg-[#e0f1f5] px-4 py-2 text-sm text-[#3f4947]"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2"><span className="inline-flex items-center gap-2 rounded-full bg-[#005f3a] px-2.5 py-1 text-xs font-semibold text-white"><span className="h-1.5 w-1.5 rounded-full bg-[#8ff8bc]" /> Clinical governance active</span><span className="hidden sm:block">Content aligned with SASOG, RCOG &amp; WHO guidelines • HPCSA-licensed peer review</span><a className="font-semibold text-[#004340]" href="#governance">Editorial charter <ArrowRight className="inline" size={14} /></a></div></section>
+      <header className="border-b border-[#d5e5e9] bg-[#eefcff]/95 backdrop-blur"><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8"><a href="#top" className="flex items-center gap-3" aria-label="ORU Social home"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0d5c58] text-lg font-bold text-white">O</span><span><strong className="block text-[15px]">ORU Social</strong><small className="block text-[10px] uppercase tracking-[.2em] text-[#6f7978]">Women&apos;s health</small></span></a><nav className="hidden items-center gap-7 text-sm font-semibold text-[#3f4947] md:flex"><a href="#topics">Clinical domains</a><a href="#guides">Clinical guides</a><a href="#governance">Governance</a></nav><button className="rounded-lg p-2 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button><button className="hidden rounded-lg border border-[#bec9c7] bg-white px-4 py-2 text-sm font-semibold text-[#004340] md:block">Provider sign in</button></div>{menuOpen && <nav className="border-t border-[#d5e5e9] px-4 py-4 md:hidden"><div className="flex flex-col gap-4 text-sm font-semibold"><a href="#topics">Clinical domains</a><a href="#guides">Clinical guides</a><a href="#governance">Governance</a></div></nav>}</header>
+      <section id="top" className="relative overflow-hidden"><div className="absolute -right-24 -top-28 h-96 w-96 rounded-full bg-[#abefe9]/30 blur-3xl" /><div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[#ff897f]/10 blur-3xl" /><div className="relative mx-auto max-w-7xl px-4 py-14 lg:px-8 lg:py-20"><div className="grid gap-10 lg:grid-cols-12 lg:items-center"><div className="lg:col-span-8"><div className="inline-flex items-center gap-2 rounded-full bg-[#e0f1f5] px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#004340]"><ShieldCheck size={16} /> South African FemTech care infrastructure</div><h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-[-.04em] sm:text-5xl lg:text-[3.6rem]">Accessible, clinically-reviewed women&apos;s health &amp; care navigation.</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-[#3f4947]">Empowering women and girls across Africa with verified reproductive health education, licensed provider discovery and clear pathways to appropriate care.</p></div><aside className="rounded-xl bg-white p-6 shadow-[0_8px_24px_-4px_rgba(13,92,88,.08)]"><div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#3f4947]"><span>Clinical registry</span><HeartPulse className="text-[#005f3a]" size={20} /></div><div className="mt-5 grid grid-cols-2 gap-4"><div><strong className="block text-3xl font-bold text-[#004340]">1,420+</strong><span className="text-xs text-[#3f4947]">Verified specialists</span></div><div><strong className="block text-3xl font-bold text-[#005f3a]">380+</strong><span className="text-xs text-[#3f4947]">Reviewed guides</span></div></div><p className="mt-5 flex items-center gap-2 border-t border-[#d5e5e9] pt-4 text-xs font-semibold text-[#3f4947]"><CheckCircle2 className="text-[#128a58]" size={16} /> Non-commercial care standard</p></aside></div><div className="mt-10 rounded-xl bg-white p-4 shadow-[0_8px_24px_-4px_rgba(13,92,88,.08)]"><div className="flex flex-col gap-3 md:flex-row"><label className="relative flex-1"><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6f7978]" size={20} /><span className="sr-only">Search clinical resources</span><input value={query} onChange={(e) => setQuery(e.target.value)} className="h-14 w-full rounded-lg bg-[#e6f7fa] pl-12 pr-4 outline-none focus:ring-2 focus:ring-[#0d5c58]" placeholder="Search a condition, procedure or health topic..." /></label><a href="#guides" className="inline-flex h-14 items-center justify-center gap-2 rounded-lg bg-[#004340] px-7 font-semibold text-white transition hover:bg-[#0d5c58]">Explore care <ArrowRight size={18} /></a></div><div className="mt-3 flex flex-wrap items-center gap-2 text-xs"><span className="mr-1 font-bold uppercase tracking-wider text-[#6f7978]">Priority topics:</span>{['Fertility & IVF', 'Menstrual health & PCOS', 'Maternal & newborn care'].map((item) => <button key={item} onClick={() => { setTopic(item); document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' }) }} className="rounded-full bg-[#daebef] px-3 py-2 font-semibold text-[#0f1e21] hover:bg-[#0d5c58] hover:text-white">{item}</button>)}</div></div></div></section>
+      <section id="topics" className="bg-[#e6f7fa] px-4 py-14 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><div className="max-w-2xl"><p className="text-sm font-bold uppercase tracking-wider text-[#004340]">Comprehensive reproductive curriculum</p><h2 className="mt-2 text-3xl font-bold tracking-tight">Six core clinical domains</h2><p className="mt-3 leading-7 text-[#3f4947]">From menarche to postmenopause, explore structured taxonomies for symptoms, evidence and appropriate levels of care.</p></div><div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{topics.map(([name, count, description], index) => <button key={name} onClick={() => { setTopic(name); document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' }) }} className="group rounded-xl bg-white p-6 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"><div className="flex items-center justify-between"><span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#daebef] text-[#004340]"><Stethoscope size={21} /></span><span className="rounded-full bg-[#e0f1f5] px-2.5 py-1 text-xs font-semibold text-[#3f4947]">{count}</span></div><h3 className="mt-5 text-lg font-bold group-hover:text-[#004340]">{index + 1}. {name}</h3><p className="mt-2 text-sm leading-6 text-[#3f4947]">{description}</p><span className="mt-5 flex items-center gap-1 text-sm font-bold text-[#004340]">Browse guides <ArrowRight size={15} /></span></button>)}</div></div></section>
+      <section id="guides" className="px-4 py-14 lg:px-8 lg:py-20"><div className="mx-auto max-w-7xl"><div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-bold uppercase tracking-wider text-[#004340]">Evidence library</p><h2 className="mt-2 text-3xl font-bold tracking-tight">Peer-reviewed clinical guides</h2></div><select aria-label="Filter guides by topic" value={topic} onChange={(e) => setTopic(e.target.value)} className="h-11 rounded-lg border border-[#bec9c7] bg-white px-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#0d5c58]"><option>All topics</option>{topics.map(([name]) => <option key={name}>{name}</option>)}</select></div><div className="mt-8 grid gap-5 lg:grid-cols-3">{filtered.map((item) => <article key={item.title} className="flex flex-col rounded-xl border border-[#d5e5e9] bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><span className="rounded-full bg-[#e6f7fa] px-2.5 py-1 text-xs font-bold text-[#004340]">Peer reviewed</span><BookOpen className="text-[#6f7978]" size={18} /></div><p className="mt-6 text-xs font-bold uppercase tracking-wider text-[#9f3f39]">{item.topic}</p><h3 className="mt-2 text-xl font-bold leading-snug">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-6 text-[#3f4947]">{item.summary}</p><div className="mt-6 flex items-center justify-between border-t border-[#e6f7fa] pt-4 text-xs text-[#6f7978]"><span className="flex items-center gap-1.5"><Clock3 size={14} /> {item.time}</span><span>Reviewed 2026</span></div><button className="mt-5 flex items-center gap-2 text-sm font-bold text-[#004340]">Read guide <ArrowRight size={15} /></button></article>)}{filtered.length === 0 && <div className="rounded-xl border border-dashed border-[#bec9c7] p-12 text-center lg:col-span-3"><Search className="mx-auto text-[#6f7978]" /><p className="mt-3 font-semibold">No guides found</p><button className="mt-3 text-sm font-bold text-[#004340] underline" onClick={() => { setQuery(''); setTopic('All topics') }}>Reset filters</button></div>}</div></div></section>
+      <section id="governance" className="border-t border-[#d5e5e9] bg-[#004340] px-4 py-14 text-white lg:px-8"><div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"><div className="max-w-2xl"><div className="flex items-center gap-2 text-sm font-bold text-[#8ed2cc]"><ShieldCheck size={18} /> Built with clinical accountability</div><h2 className="mt-4 text-3xl font-bold tracking-tight">Clear information. Responsible pathways. Human care.</h2><p className="mt-4 leading-7 text-[#d5e5e9]">Every guide is designed to show its source, review status and date. This portal provides education, not diagnosis or treatment.</p></div><a href="#guides" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-bold text-[#004340]">View reviewed guides <ArrowRight size={16} /></a></div></section>
+      <footer className="border-t border-[#d5e5e9] px-4 py-7 text-xs text-[#3f4947] lg:px-8"><div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:justify-between"><span>© 2026 ORU Social. General education, thoughtfully delivered.</span><span>Privacy • Accessibility • Clinical governance</span></div></footer>
     </main>
   )
 }
