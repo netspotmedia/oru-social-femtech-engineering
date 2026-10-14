@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'ORU Social Women\'s Health Portal',
+  description: 'Clear, compassionate women\'s health education and trusted pathways to care from ORU Social.',
+  generator: 'ORU Social',
   icons: {
     icon: [
       {
