@@ -36,11 +36,13 @@ export type ContentItem = {
   category: { name: string } | { name: string }[] | null
 }
 
+const contentItemSelect = 'id, slug, title, summary, content_type, read_time, image_url, body, category:content_categories(name)'
+
 export async function getPublishedGuides() {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('content_items')
-    .select('id, slug, title, summary, content_type, read_time, image_url, body, category:content_categories(name)')
+    .select(contentItemSelect)
     .eq('is_published', true)
     .eq('content_type', 'article')
     .order('published_at', { ascending: false, nullsFirst: false })
@@ -52,6 +54,47 @@ export async function getPublishedGuides() {
   }
 
   return (data ?? []) as ContentItem[]
+}
+
+export async function getPublishedContent(contentType?: ContentItem['content_type']) {
+  const supabase = await createClient()
+  let query = supabase
+    .from('content_items')
+    .select(contentItemSelect)
+    .eq('is_published', true)
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .limit(50)
+
+  if (contentType) query = query.eq('content_type', contentType)
+
+  const { data, error } = await query
+  if (error) {
+    console.error('[v0] Published content query failed:', error.message)
+    return []
+  }
+
+  return (data ?? []) as ContentItem[]
+}
+
+export async function getPublishedContentBySlug(slug: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('content_items')
+    .select(contentItemSelect)
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .maybeSingle()
+
+  if (error) {
+    console.error('[v0] Content detail query failed:', error.message)
+    return null
+  }
+
+  return (data ?? null) as ContentItem | null
+}
+
+export function isContentType(value: string | null): value is ContentItem['content_type'] {
+  return value === 'article' || value === 'resource' || value === 'expert'
 }
 
 export function getCategoryName(category: ContentItem['category']) {
