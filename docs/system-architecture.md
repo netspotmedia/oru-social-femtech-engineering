@@ -1,51 +1,53 @@
-# System Architecture Audit
+# System Architecture
 
-## Current architecture
-The workspace currently contains a single static App Router page with global Tailwind/shadcn styles. There is no server boundary beyond Next's default route handling, no persistence boundary, and no external integration boundary.
+## Current architecture (verified 15 Oct 2026, commit `6e8a5ed`)
 
-```text
-Browser
-  -> Next.js App Router `/`
-  -> static placeholder JSX
-```
-
-## Required target architecture (approval-dependent)
-The smallest safe vertical slice should preserve a clear separation:
+A single static page. There is no server boundary beyond Next.js route handling,
+no persistence boundary, and no external integration boundary.
 
 ```text
 Browser
-  -> accessible Women's Health portal UI
-  -> server route/action with schema validation and rate limits
-  -> authoritative content/provider service
-  -> approved data source
-
-Optional AI navigation:
-  -> server-only bounded adapter
-  -> approved source registry/retrieval
-  -> safety policy + validated citations
+  -> Next.js App Router `/` (static prerender + client hydration)
+  -> app/page.tsx — search/filter state held in useState/useMemo only
+  -> no fetch, no server actions, no API routes, no database
 ```
 
-Provider records must come from the authoritative source. AI must never be the source of provider names, credentials, availability, prices, or booking claims.
+## Files and responsibilities
 
-## Trust boundaries to review
-- Browser to application server.
-- Application server to database/platform API.
-- Application server to AI vendor, if approved.
-- Admin/editor to governance workflows.
-- External source ingestion to reviewed publication state.
+| File | Responsibility |
+|---|---|
+| `app/page.tsx` | Entire home page: header, hero search, domain filter, guides, AI preview, providers preview, governance, footer |
+| `app/layout.tsx` | Root layout, metadata, production-only Vercel Analytics |
+| `app/globals.css` | Tailwind 4 + shadcn preset + design tokens |
+| `components/ui/button.tsx` | shadcn button (present, currently unused by the page) |
+| `lib/utils.ts` | `cn()` class-name helper |
+| `public/guides/` | 3 freely-licensed guide photos (Wikimedia Commons, attributed in-page) |
+| `public/placeholder-user.jpg` | Generic avatar used for illustrative provider cards |
 
-## Data minimisation requirements
-Do not collect identifiable health information for the initial portal. Keep analytics event-level and non-sensitive. Do not place health questions in URLs or unredacted logs. Private data must not be shared through public caches.
+## Data flow
 
-## Architecture gaps
-- No user identity or role source.
-- No source-of-truth contracts for resources/providers/appointments.
-- No validation, error model, pagination, rate limits, or audit events.
-- No retention, deletion, consent, incident, or rollback design.
-- No clinical safety review process.
+All content is hardcoded in `app/page.tsx` (`domains`, `guides`, `providers` arrays).
+User input (search query, life-stage filter, mobile menu) never leaves the browser.
+Images are same-origin static files. Analytics (production only) collects no
+health data by itself.
 
-## Proposed first slice
-Public, read-only health education portal using an approved, explicitly test-labelled fixture repository only if the owner approves prototype mode. It should include categories, a reviewed-resource detail state, accessible loading/empty/error states, and a clear handoff to provider discovery. Provider and AI features remain disabled until their authoritative sources and safety approvals exist.
+## Trust boundaries (target — none yet enforced in code)
 
-## Change log
-- 2026-10-14: Documented current and target boundaries from repository audit.
+- Browser ↔ application server (no server logic exists yet)
+- Application server ↔ database / platform API (no connection exists)
+- Application server ↔ AI vendor (no connection exists; preview is static JSX)
+- Editor ↔ governance workflow (no admin surface exists)
+
+## Design decisions
+
+- **Static first:** `pnpm build` prerenders `/` to static HTML; the page works without JavaScript for reading (interactive filter needs JS).
+- **No external runtime dependencies:** fonts are system stack; images are local; no CDN scripts. This keeps the page usable on slow connections and avoids third-party data sharing.
+- **Illustrative data labelling:** provider names, licence numbers, counts, and
+  availability shown are mockup placeholders and are labelled as such in the UI,
+  per the no-fabrication engineering rule.
+
+## Gaps before any backend is added
+
+No validation layer, error model, pagination, rate limits, audit events, retention
+policy, consent flow, or rollback design. See `docs/development-roadmap.md` and
+`docs/privacy-and-safety.md`.

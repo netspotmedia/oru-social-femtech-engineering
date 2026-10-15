@@ -1,46 +1,51 @@
 # Development Roadmap
 
-## Stage A — Audit (current)
-- Inspect repository, manifests, routes, config, integrations, schema, auth, tests, and deployment metadata.
-- Record evidence, blockers, risks, and baseline build result.
-- Status: complete for the supplied workspace; external ORU Social systems remain unavailable.
+## Stage A — Audit (done, 15 Oct 2026)
 
-## Stage B — Design (next after approval)
-- Confirm whether this is a standalone prototype or an integration into an existing ORU Social platform.
-- Define user journeys, responsive screens, reusable components, API contracts, data classifications, threat model, and acceptance criteria.
-- Confirm content review, provider verification, clinical safety, privacy, and jurisdiction boundaries.
+Repository, manifests, routes, config, and absence of backend/auth/data/test
+systems verified and recorded in `docs/current-status.md`. Evidence in
+`docs/testing-results.md`.
 
-## Stage C — Approval checkpoint
-Required decisions:
-1. Authoritative repository/API/database and environment access.
-2. Smallest approved MVP slice.
-3. Synthetic fixture policy and prototype labeling.
-4. Auth and role model.
-5. Approved content/source registry and reviewer.
-6. Provider data/verification source.
-7. AI enabled versus deterministic test adapter.
-8. Legal/privacy review and retention policy.
-9. Licensing and publication boundary.
+## Stage B — Design (done for home page)
 
-## Stage D — Implementation order
-1. Portal shell, metadata, responsive/accessibility foundations.
-2. Approved resource/category read flow with server-confirmed states.
-3. Real provider search/profile flow once source is verified.
-4. Existing booking/consultation handoff only; no duplicate telehealth system.
-5. Bounded AI navigation only after approved sources, model/privacy review, safety policy, citations, reporting, and rate limits.
+Stitch v2 home page implemented and screenshot-verified against
+`screen.png`. Remaining design work (provider detail, guide detail, AI
+interaction, admin screens) is out of scope until data sources exist.
+
+## Stage C — Approval checkpoint (open)
+
+1. Licence choice (`LICENSE`) and contribution policy (`CONTRIBUTING.md`).
+2. Authoritative ORU Social repo/API/database access — or confirmation this stays standalone.
+3. Approved content/source registry + named clinical review owner.
+4. Provider data owner, verification evidence, jurisdiction scope.
+5. AI: keep disabled vs deterministic test adapter vs approved vendor (with privacy sign-off).
+6. POPIA/legal review owner and retention policy.
+7. Hosting target and deployment process.
+8. Approval to add database, auth, test framework, and CI (plus removing `ignoreBuildErrors`).
+
+## Stage D — Implementation order (after approvals)
+
+1. Docs/CI foundations: test runner, lint, type gate, dependency scanning.
+2. Approved resource/category read flow (server-validated, paginated).
+3. Real provider search/profile flow once the source is verified.
+4. Existing booking/consultation handoff only — no duplicate telehealth system.
+5. Bounded AI navigation only after sources, model/privacy review, safety policy,
+   validated citations, reporting, and rate limits.
 6. Restricted governance workflows if required.
 
-## Stage E — Verification
-Run type checking without suppression, linting, unit/integration/E2E tests, accessibility checks, security tests, slow-network checks, and the complete synthetic user journey. Record exact commands, results, commit SHA when available, and residual failures.
+## Stage E — Verification (ongoing)
+
+Current evidence: `docs/testing-results.md`. Target before any release: automated
+unit/integration/E2E, accessibility checks, security tests, slow-network checks,
+and the full synthetic user journey — all recorded with commands and results.
 
 ## Stage F — Handover
-Update setup, environment names (never values), migrations/rollback, privacy and safety notes, testing evidence, deployment steps, known limitations, and next tasks.
 
-## Proposed smallest end-to-end MVP
-A clearly labelled read-only Women's Health education portal backed by an approved content source or test-only fixture adapter, with category browse, resource detail metadata, search/empty/error states, and a non-clinical safety notice. This is the smallest slice that can be demonstrated without fabricating providers, credentials, bookings, clinical claims, or AI citations.
+Per-release: files changed, migrations/rollback, environment names (never values),
+test evidence, deployment steps, known limitations, residual risks, next tasks.
 
 ## Effort estimate
-A realistic estimate cannot be produced from this shell alone. It depends on the size and quality of the authoritative ORU Social interfaces, data readiness, privacy review, and whether authentication/provider/AI services already exist. Estimate after those inputs are supplied.
 
-## Change log
-- 2026-10-14: Added staged roadmap and approval-dependent MVP boundary.
+Not estimable from the prototype alone — depends on authoritative interfaces, data
+readiness, privacy review, and whether auth/provider/AI services already exist.
+Estimate after Stage C inputs arrive.

@@ -8,7 +8,6 @@ import {
   BadgeCheck,
   Brain,
   Bot,
-  BookOpen,
   CalendarDays,
   ClipboardCheck,
   Egg,
@@ -47,9 +46,9 @@ const domains: Domain[] = [
 ]
 
 const guides = [
-  { category: 'Endometriosis', time: '8 min', title: 'Differentiating Chronic Pelvic Pain from Primary Dysmenorrhea', summary: 'A diagnostic roadmap covering transvaginal ultrasound markers, laparoscopy indications, and non-opioid pain strategies.', reviewer: 'Dr. Naledi Molefe, FCOG(SA)', ref: 'SASOG Guidelines' },
-  { category: 'Fertility & IVF', time: '11 min', title: 'Navigating IVF in South Africa: Timelines, Protocols & Costs', summary: 'Gonadotropin stimulation cycles, embryo grading standards, and public versus private fertility care considerations.', reviewer: 'Dr. Fatima Adams, Cert Reprod', ref: 'SASREG Cohort' },
-  { category: 'Pelvic Health', time: '6 min', title: 'Pelvic Floor Rehabilitation: Distinguishing Spasm from Weakness', summary: 'Why Kegels are not universally appropriate: evaluating hypotonic vs hypertonic floor issues with certified physiotherapists.', reviewer: 'Sarah van Zyl, BSc Physio', ref: 'NICE Protocol' },
+  { category: 'Endometriosis', time: '8 min', image: '/guides/guide-endometriosis.jpg', imageAlt: 'Female doctor consulting in her office during a patient appointment', creditUrl: 'https://commons.wikimedia.org/wiki/File:Doctor_working_in_her_office_while_using_a_computer_and_taking_notes_during_a_consultation_with_a_patient.jpg', title: 'Differentiating Chronic Pelvic Pain from Primary Dysmenorrhea', summary: 'A diagnostic roadmap covering transvaginal ultrasound markers, laparoscopy indications, and non-opioid pain strategies.', reviewer: 'Dr. Naledi Molefe, FCOG(SA)', ref: 'SASOG Guidelines' },
+  { category: 'Fertility & IVF', time: '11 min', image: '/guides/guide-ivf.jpg', imageAlt: 'Embryologist working with a microscope in an IVF laboratory', creditUrl: 'https://commons.wikimedia.org/wiki/File:IVF_laboratory.jpg', title: 'Navigating IVF in South Africa: Timelines, Protocols & Costs', summary: 'Gonadotropin stimulation cycles, embryo grading standards, and public versus private fertility care considerations.', reviewer: 'Dr. Fatima Adams, Cert Reprod', ref: 'SASREG Cohort' },
+  { category: 'Pelvic Health', time: '6 min', image: '/guides/guide-pelvic-health.jpg', imageAlt: 'Midwife holding a newborn infant in a clinic', creditUrl: 'https://commons.wikimedia.org/wiki/File:African_Midwife.jpg', title: 'Pelvic Floor Rehabilitation: Distinguishing Spasm from Weakness', summary: 'Why Kegels are not universally appropriate: evaluating hypotonic vs hypertonic floor issues with certified physiotherapists.', reviewer: 'Sarah van Zyl, BSc Physio', ref: 'NICE Protocol' },
 ]
 
 const providers = [
@@ -218,9 +217,8 @@ export default function Page() {
           <div className="mt-6 grid gap-5 lg:grid-cols-3">
             {guides.map((g) => (
               <article key={g.title} className="flex flex-col overflow-hidden rounded-xl border border-[#e3ecec] bg-white shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-                <div className="flex h-36 items-center justify-center bg-gradient-to-br from-[#e0f1f5] via-[#daebef] to-[#abefe9]/60" role="img" aria-label={`${g.category} guide illustration placeholder`}>
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-[#0d5c58] shadow-sm"><BookOpen size={26} /></span>
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={g.image} alt={g.imageAlt} loading="lazy" className="h-44 w-full object-cover" />
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center gap-2 text-[11px] font-bold">
                     <span className="rounded-full bg-[#e6f7fa] px-2.5 py-1 text-[#004340]">{g.category}</span>
@@ -236,6 +234,16 @@ export default function Page() {
               </article>
             ))}
           </div>
+          <p className="mt-4 text-[11px] leading-5 text-[#6f7978]">
+            Guide images via Wikimedia Commons (freely licensed):{' '}
+            {guides.map((g, i) => (
+              <span key={g.creditUrl}>
+                {i > 0 && ' · '}
+                <a href={g.creditUrl} target="_blank" rel="noreferrer" className="underline hover:text-[#004340]">{g.category.toLowerCase()} photo</a>
+              </span>
+            ))}
+            . Full author and licence details on each file page.
+          </p>
         </div>
       </section>
 
