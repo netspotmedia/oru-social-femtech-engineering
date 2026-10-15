@@ -5,22 +5,25 @@ Accessible, clinically-reviewed women's health education and care navigation for
 **Owner:** Florida N. Mpengesi, Founder and CEO — Online Riches Unleashed (Pty) Ltd, trading as ORU Social
 **Technical lead:** Abayomi Okemakinde
 
-> **Prototype status.** This is a front-end prototype with illustrative content.
-> There is no backend, database, authentication, booking system, or live AI model.
-> Provider names, licence numbers, statistics, and availability shown in the UI come
-> from the Stitch design mockup and are labelled as illustrative in the interface.
+> **Prototype status.** Guide cards load live from Supabase (published rows only);
+> the rest is illustrative front-end content. There is no authentication, booking
+> system, or live AI model. Provider names, licence numbers, statistics, and
+> availability shown in the UI come from the Stitch design mockup and are labelled
+> as illustrative in the interface. DB-sourced reviewer/reference strings follow
+> the governed `body`-line convention.
 > See `docs/current-status.md` and `docs/privacy-and-safety.md`.
 
 ## What is implemented
 
-A single-page Women's Health portal (`app/page.tsx`, client component) following the
-approved Stitch design (v2):
+A Women's Health portal (server `app/page.tsx` + client `app/page-client.tsx`)
+following the approved Stitch design (v2):
 
 - Sticky header with section navigation and mobile menu
 - Centered hero with working topic search and popular-topic shortcuts
 - 9 clinical domains with life-stage filter (All / Reproductive / Perinatal / Mature)
-- 3 peer-reviewed clinical guide cards with freely-licensed photography
-  (Wikimedia Commons, attributed under the grid)
+- Clinical guide cards sourced live from Supabase (published-only) with an
+  explicit error state when the service is unreachable; local photos
+  (Wikimedia Commons, attributed) back the fallback card
 - AI triage sandbox **preview** (static illustration — not connected to any model)
 - Provider directory **preview** (mockup entries, labelled illustrative)
 - Clinical Governance Charter, footer with SA emergency numbers and clinical disclaimer
@@ -68,10 +71,17 @@ pnpm build               # production build — requires Supabase env vars
 
 Evidence and screenshot verification: `docs/testing-results.md`.
 
+## Deployment
+
+Vercel (Hobby) behind GitHub `main`. Required dashboard env vars and the
+single-committer Hobby rule are documented in `deployment/README.md`.
+
 ## Known limitations
 
-- All clinical content is static copy from the design mockup, not an approved content registry.
-- No authentication, roles, or server-side checks exist.
+- Guide content comes from Supabase published rows; the `body`-line
+  reviewer/reference convention needs governance (no approved content registry yet).
+- No authentication, roles, or admin workflows exist; the RLS policy is proposed
+  but unapplied — see `docs/current-status.md`.
 - `next.config.mjs` sets `typescript.ignoreBuildErrors: true` — see `docs/current-status.md`.
 - No licence selected yet (`LICENSE` intentionally absent); no contribution policy yet
   (`CONTRIBUTING.md` intentionally absent) — pending owner decisions.

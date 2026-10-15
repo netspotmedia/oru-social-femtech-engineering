@@ -49,3 +49,13 @@ Supabase-dependent checks used inline dummy env where noted.
 
 Note: every `pnpm` invocation re-verifies the lockfile against supply-chain
 policies over the network (~25s–3min on this connection) before running.
+
+## Deployment note (Vercel Hobby, 15 Oct 2026)
+
+Deployments were blocked with "couldn't find a Git account for the commit
+author / Hobby teams do not support collaboration". Root cause: commits were
+authored as `goldyomight-7002 <goldyomight@gmail.com>`, which maps to no Git
+account on the Hobby team. Fixed without paying by aligning the repo author
+email with the GitHub account's verified email (`netspotsmedia@gmail.com`)
+and pushing a trigger commit (`f10a96c`). Rule going forward: every commit on
+`main` must carry the connected account's email — see `deployment/README.md`.

@@ -37,7 +37,7 @@ Repository root is a git checkout; remote is
 | Admin / governance flows | Not implemented | No roles or admin routes |
 | Auth / sessions / permissions | Not implemented | SSR cookie plumbing only; page and API are fully public |
 | Tests / CI | Not implemented | Manual runs only; see `docs/testing-results.md` |
-| Deployment config | Not assessed | No hosting/infra files in repo; build requires Supabase env |
+| Deployment config | Vercel (Hobby) behind GitHub `main` | Env vars in dashboard; Hobby deploys only commits authored by the connected Git account — see `deployment/README.md` |
 
 ## Risks (open)
 
@@ -64,6 +64,10 @@ Repository root is a git checkout; remote is
 
 ## Change log
 
+- 2026-10-15: Docs refresh — all `.md` brought to `f10a96c`: Supabase-surface
+  status, Vercel (Hobby) deployment target + single-committer rule, new
+  `deployment/README.md`; `AGENTS.md` (Next.js-generated) and the master
+  engineering prompt intentionally untouched.
 - 2026-10-15: Supabase-surface fixes — failure-aware queries (503 + error
   notice instead of silent placeholder), `.env.example`, `.gitignore` covers
   plain `.env`, removed dead `components/portal-client.tsx`, dropped unused

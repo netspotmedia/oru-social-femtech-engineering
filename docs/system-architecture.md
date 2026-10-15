@@ -59,14 +59,20 @@ publishing. Analytics (production only) collects no health data by itself.
 
 ## Design decisions
 
-- **Static first:** `pnpm build` prerenders `/` to static HTML; the page works without JavaScript for reading (interactive filter needs JS).
-- **No external runtime dependencies:** fonts are system stack; images are local; no CDN scripts. This keeps the page usable on slow connections and avoids third-party data sharing.
+- **Dynamic where data is live:** `/` and `/api/content*` render on demand
+  (`cookies()`-based Supabase client); the page works without JavaScript for
+  reading (interactive filter needs JS).
+- **Minimal external runtime surface:** fonts are system stack; images are local
+  except DB-driven `image_url` values (each must be approved before publishing).
+  No CDN scripts. This keeps the page usable on slow connections and avoids
+  unnecessary third-party data sharing.
 - **Illustrative data labelling:** provider names, licence numbers, counts, and
   availability shown are mockup placeholders and are labelled as such in the UI,
   per the no-fabrication engineering rule.
 
-## Gaps before any backend is added
+## Remaining gaps
 
-No validation layer, error model, pagination, rate limits, audit events, retention
-policy, consent flow, or rollback design. See `docs/development-roadmap.md` and
-`docs/privacy-and-safety.md`.
+Validation beyond the `type` allow-list, pagination for large libraries, rate
+limits, audit events, retention policy, consent flow, rollback design, and
+hosting-layer security headers. See `docs/development-roadmap.md`,
+`docs/privacy-and-safety.md`, and `deployment/README.md`.

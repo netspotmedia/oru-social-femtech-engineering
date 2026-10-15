@@ -20,7 +20,8 @@ interaction, admin screens) is out of scope until data sources exist.
 4. Provider data owner, verification evidence, jurisdiction scope.
 5. AI: keep disabled vs deterministic test adapter vs approved vendor (with privacy sign-off).
 6. POPIA/legal review owner and retention policy.
-7. Hosting target and deployment process.
+7. Hosting target: Vercel (Hobby) behind GitHub `main` — decided; see
+   `deployment/README.md` for env vars and the single-committer Hobby rule.
 8. Approval to add database, auth, test framework, and CI (plus removing `ignoreBuildErrors`).
 
 ## Stage D — Implementation order (after approvals)
@@ -30,7 +31,6 @@ interaction, admin screens) is out of scope until data sources exist.
 2. Approved resource/category read flow — **read side implemented**
    (server-validated published-only queries, bounded limits, 503 on failure);
    still needs RLS applied + rate limits + pagination if the library grows.
-2. Approved resource/category read flow (server-validated, paginated).
 3. Real provider search/profile flow once the source is verified.
 4. Existing booking/consultation handoff only — no duplicate telehealth system.
 5. Bounded AI navigation only after sources, model/privacy review, safety policy,

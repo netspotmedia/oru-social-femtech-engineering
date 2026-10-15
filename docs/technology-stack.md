@@ -18,6 +18,7 @@ Verified from source on 15 Oct 2026. Evidence files: `package.json`,
 | Analytics | @vercel/analytics (production only) | 1.6.1 | `package.json`, `app/layout.tsx:45` |
 | Content backend | Supabase (Postgres + anon/publishable key via `@supabase/ssr`) | ^0.12.7 / ^2.117.3 | `package.json`, `lib/supabase/server.ts:1-25` |
 | Env convention | `.env.local` (gitignored, incl. plain `.env`); names documented in `.env.example` | — | `.gitignore`, `.env.example` |
+| Hosting | Vercel (Hobby) behind GitHub `main`; Supabase env vars in dashboard | — | `deployment/README.md` |
 | Package manager | pnpm | 12.3.4 declared / 11.3.0 used locally | `package.json`, local env |
 | Runtime (local) | Node.js | v24.15.0 | local env |
 

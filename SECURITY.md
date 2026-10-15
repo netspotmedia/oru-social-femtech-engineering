@@ -38,7 +38,7 @@ We will acknowledge receipt, assess, and coordinate a fix and disclosure timelin
 | Secrets management | Env values in `.env.local` (gitignored, incl. plain `.env`); repo holds names only (`.env.example`); no values committed |
 | Authentication / authorisation | Not implemented — the page is fully public |
 | Input handling | Guides search/filter stays client-side; `type` query param allow-listed (`isContentType`), slug via parameterized Supabase query; RLS proposal unapplied — see risks |
-| Dependencies | Pinned via `pnpm-lock.yaml`; no audit/SCA workflow yet — recommended before release; unused `swr` removal in progress (registry flakiness — see testing results) |
+| Dependencies | Pinned via `pnpm-lock.yaml`; unused `swr` removed (consistency confirmed by pnpm lockfile check — see testing results); no audit/SCA workflow yet — recommended before release |
 | Type safety gate | `next.config.mjs` sets `typescript.ignoreBuildErrors: true` — builds succeed even with type errors; must be removed before any production release |
 | Security headers / CSP | Not configured — to be set at the hosting layer |
 | Analytics | `@vercel/analytics` renders in production only; collects no health data by itself |
@@ -50,4 +50,7 @@ We will acknowledge receipt, assess, and coordinate a fix and disclosure timelin
 3. Configure security headers (CSP, HSTS, X-Content-Type-Options, Referrer-Policy) at the host.
 4. Complete the privacy/legal review in `docs/privacy-and-safety.md` (including POPIA).
 5. If authentication, forms, or any data collection are added, conduct a threat-model
-   review first — the current policy assumes a read-only static page.
+   review first — the current policy assumes a read-only published-content surface.
+6. Apply and verify the RLS policy (`supabase/migrations/0001_*`) so the anon key
+   reaches published rows only; set Supabase env vars in the Vercel dashboard
+   (all environments), never in code — see `deployment/README.md`.
