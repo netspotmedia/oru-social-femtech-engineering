@@ -14,7 +14,6 @@ import {
   Flag,
   Flower2,
   HeartHandshake,
-  HeartPulse,
   MapPin,
   Menu,
   Search,
@@ -81,11 +80,16 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-[#f8fafb] font-sans text-[#0f1e21]">
+      <div className="bg-[#004340] px-4 py-2 text-center text-[12px] font-semibold tracking-wide text-white">
+        Clinically-reviewed women&apos;s health education for South Africa ·{' '}
+        <a href="#governance" className="underline underline-offset-2 hover:no-underline">Our clinical safety standard</a>
+      </div>
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-[#d5e5e9] bg-[#f8fafb]/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 lg:px-8">
           <a href="#top" className="flex items-center gap-2 text-[#004340]" aria-label="ORU FemTech South Africa home">
-            <HeartPulse size={26} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/oru-social-logo.png" alt="ORU Social emblem" width={32} height={32} className="h-8 w-8 rounded-full object-cover ring-1 ring-[#d5e5e9]" />
             <span className="leading-tight">
               <span className="block text-[15px] font-bold tracking-tight">ORU FemTech</span>
               <small className="block text-[10px] font-normal uppercase tracking-[.18em] text-[#6f7978]">South Africa</small>
@@ -358,7 +362,7 @@ export default function Page() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 md:grid-cols-12">
             <div className="md:col-span-5">
-              <p className="flex items-center gap-2 font-bold text-[#004340]"><HeartPulse size={18} /> ORU FemTech South Africa</p>
+              <p className="flex items-center gap-2 font-bold text-[#004340]">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/oru-social-logo.png" alt="" width={22} height={22} className="h-[22px] w-[22px] rounded-full object-cover ring-1 ring-[#d5e5e9]" /> ORU FemTech South Africa</p>
               <p className="mt-2 max-w-sm text-xs leading-5">Dedicated to improving reproductive autonomy, clinical transparency, and access to verified maternal and women&apos;s health clinicians across Southern Africa.</p>
               <a href="#governance" className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#ffdad6] px-3 py-1.5 text-xs font-bold text-[#93000a]"><Flag size={13} /> Report clinical inaccuracy</a>
             </div>
