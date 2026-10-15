@@ -5,7 +5,11 @@ type RouteContext = { params: Promise<{ slug: string }> }
 
 export async function GET(_request: Request, { params }: RouteContext) {
   const { slug } = await params
-  const item = await getPublishedContentBySlug(slug)
+  const { item, failed } = await getPublishedContentBySlug(slug)
+
+  if (failed) {
+    return NextResponse.json({ error: 'Content service unavailable.' }, { status: 503 })
+  }
 
   if (!item) {
     return NextResponse.json({ error: 'Content not found.' }, { status: 404 })

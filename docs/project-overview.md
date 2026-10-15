@@ -20,7 +20,10 @@ a single-page Next.js site implementing the approved Stitch home-page design (v2
 1. **Women's Health Portal** — entry point with 9 clinical categories. *Prototype UI done; content is static mockup copy.*
 2. **Healthcare Provider Discovery** — searchable directory of verified providers. *Blocked: no authorised provider data source. UI shows labelled illustrative entries.*
 3. **AI-Assisted Healthcare Navigation** — bounded, source-grounded assistant. *Blocked: no approved sources, model, or safety review. UI shows a static preview only.*
-4. **Women's Health Education / EdTech** — reviewed guides with source metadata. *Prototype cards done; no content registry or review workflow exists.*
+4. **Women's Health Education / EdTech** — guides now read live from Supabase
+   (published-only) with an explicit service-error state. *No progress tracking
+   or review workflow exists; the `body`-line mapping convention needs
+   governance.*
 5. **Telehealth Integration** — reuse of existing booking/video flows. *Not started; no existing capability found to integrate with.*
 6. **Admin and Content Governance** — restricted editorial workflows. *Not started.*
 

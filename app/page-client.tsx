@@ -57,7 +57,7 @@ const popularSearches: { label: string; query: string }[] = [
   { label: 'Perimenopause & HRT', query: 'HRT' },
 ]
 
-export default function Page({ guides }: { guides: GuideCard[] }) {
+export default function Page({ guides, guidesFailed }: { guides: GuideCard[]; guidesFailed: boolean }) {
   const [query, setQuery] = useState('')
   const [phase, setPhase] = useState<(typeof phases)[number]>('All')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -222,6 +222,11 @@ export default function Page({ guides }: { guides: GuideCard[] }) {
             </div>
             <a href="#guides" className="inline-flex shrink-0 items-center gap-1 text-sm font-bold text-[#004340]">Explore all 380+ Guides <ArrowRight size={15} /></a>
           </div>
+          {guidesFailed && (
+            <div role="alert" className="mt-6 rounded-xl border border-[#e8c468] bg-[#fdf6e3] p-4 text-[13px] leading-6 text-[#3f4947]">
+              <strong className="font-bold text-[#0f1e21]">The latest guides could not be loaded.</strong> Check your connection and refresh — the library below may be out of date.
+            </div>
+          )}
           <div className="mt-6 grid gap-5 lg:grid-cols-3">
             {guides.map((g) => (
               <article key={g.title} className="flex flex-col overflow-hidden rounded-xl border border-[#e3ecec] bg-white shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
@@ -243,14 +248,20 @@ export default function Page({ guides }: { guides: GuideCard[] }) {
             ))}
           </div>
           <p className="mt-4 text-[11px] leading-5 text-[#6f7978]">
-            Guide images via Wikimedia Commons (freely licensed):{' '}
-            {guides.map((g, i) => (
-              <span key={g.creditUrl}>
-                {i > 0 && ' · '}
-                <a href={g.creditUrl} target="_blank" rel="noreferrer" className="underline hover:text-[#004340]">{g.category.toLowerCase()} photo</a>
-              </span>
-            ))}
-            . Full author and licence details on each file page.
+            {guides.every((g) => g.creditUrl.includes('commons.wikimedia.org')) ? (
+              <>
+                Guide images via Wikimedia Commons (freely licensed):{' '}
+                {guides.map((g, i) => (
+                  <span key={g.creditUrl}>
+                    {i > 0 && ' · '}
+                    <a href={g.creditUrl} target="_blank" rel="noreferrer" className="underline hover:text-[#004340]">{g.category.toLowerCase()} photo</a>
+                  </span>
+                ))}
+                . Full author and licence details on each file page.
+              </>
+            ) : (
+              <>Image credits and licences: see the source link on each guide&apos;s file page.</>
+            )}
           </p>
         </div>
       </section>

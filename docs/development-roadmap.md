@@ -25,7 +25,11 @@ interaction, admin screens) is out of scope until data sources exist.
 
 ## Stage D — Implementation order (after approvals)
 
-1. Docs/CI foundations: test runner, lint, type gate, dependency scanning.
+1. Docs/CI foundations: type gate (remove `ignoreBuildErrors`), lint, test runner,
+   dependency scanning. (Env convention `.env.example` + RLS proposal done.)
+2. Approved resource/category read flow — **read side implemented**
+   (server-validated published-only queries, bounded limits, 503 on failure);
+   still needs RLS applied + rate limits + pagination if the library grows.
 2. Approved resource/category read flow (server-validated, paginated).
 3. Real provider search/profile flow once the source is verified.
 4. Existing booking/consultation handoff only — no duplicate telehealth system.

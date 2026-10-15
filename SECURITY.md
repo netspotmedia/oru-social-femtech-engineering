@@ -2,16 +2,21 @@
 
 ## Scope
 
-This repository is a **front-end prototype** (Next.js static page). It has:
+This repository is a Next.js application with a **read-only Supabase content
+surface** (published guides) plus the static portal page. It has:
 
-- No backend, API routes, server actions, or middleware
-- No database or persistence of any kind
+- API routes: `GET /api/content`, `GET /api/content/:slug` (published rows only)
+- Server-side Supabase reads via the publishable/anon key (public by design)
+- No database writes from the app, no persistence of user data
 - No authentication, sessions, tokens, or user accounts
 - No handling, storage, or transmission of personal or health data
-- No secrets in code (verified by scan — see `docs/testing-results.md`)
+- No secrets in code (env var names only; values live in `.env.local`, gitignored —
+  see `docs/testing-results.md`)
 
-The attack surface is therefore limited to the static front-end itself and its
-supply chain (npm dependencies, hosting layer).
+Row-level security on `content_items` / `content_categories` must grant anon
+reads of published rows only. Policy proposal:
+`supabase/migrations/0001_content_public_read_policies.sql` (UNAPPLIED —
+verify in the Supabase dashboard before any production release).
 
 ## Reporting a vulnerability
 
@@ -30,10 +35,10 @@ We will acknowledge receipt, assess, and coordinate a fix and disclosure timelin
 
 | Area | State |
 |---|---|
-| Secrets management | No secrets exist in this repo; none are needed to run it |
+| Secrets management | Env values in `.env.local` (gitignored, incl. plain `.env`); repo holds names only (`.env.example`); no values committed |
 | Authentication / authorisation | Not implemented — the page is fully public |
-| Input handling | One client-side search filter; no server input surface exists |
-| Dependencies | Pinned via `pnpm-lock.yaml`; no audit/SCA workflow yet — recommended before release |
+| Input handling | Guides search/filter stays client-side; `type` query param allow-listed (`isContentType`), slug via parameterized Supabase query; RLS proposal unapplied — see risks |
+| Dependencies | Pinned via `pnpm-lock.yaml`; no audit/SCA workflow yet — recommended before release; unused `swr` removal in progress (registry flakiness — see testing results) |
 | Type safety gate | `next.config.mjs` sets `typescript.ignoreBuildErrors: true` — builds succeed even with type errors; must be removed before any production release |
 | Security headers / CSP | Not configured — to be set at the hosting layer |
 | Analytics | `@vercel/analytics` renders in production only; collects no health data by itself |

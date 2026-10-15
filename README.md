@@ -28,37 +28,42 @@ approved Stitch design (v2):
 ## Tech stack
 
 Next.js 16.4.0 (App Router, Turbopack) · React 19 · TypeScript 5.7.3 ·
-Tailwind CSS 4 · shadcn/Base UI · lucide-react · pnpm.
+Tailwind CSS 4 · shadcn/Base UI · lucide-react · Supabase (published content reads) · pnpm.
 Full detail: `docs/technology-stack.md`. Architecture: `docs/system-architecture.md`.
 
 ## Getting started
 
-Requirements: Node.js 24+, pnpm.
+Requirements: Node.js 24+, pnpm, Supabase project access (for content reads).
 
 ```powershell
 pnpm install
+Copy-Item .env.example .env.local   # fill in Supabase values (never commit them)
 pnpm dev      # http://localhost:3000
-pnpm build    # production build (output is fully static)
+pnpm build    # production build — requires the Supabase env vars above
 pnpm start    # serve the production build
 ```
 
-No environment variables, database, or external services are required.
+No other external services are required. Builds and the home page query
+Supabase at request/build time; without env vars the guides section renders
+an explicit "could not be loaded" notice instead of failing silently.
 
 ## Repository layout
 
 ```
-app/                  # App Router: page.tsx (home), layout.tsx, globals.css
+app/                  # App Router: page.tsx (server, fetches guides), page-client.tsx,
+                      # layout.tsx, globals.css, api/content/ (published-content GET endpoints)
 components/ui/        # shadcn button (currently unused by the page)
-lib/                  # cn() class helper
-public/               # icons, placeholders, guides/ (Wikimedia Commons photos)
+lib/supabase/         # server client + published-content queries and card mapping
+supabase/migrations/  # RLS policy proposal (UNAPPLIED — see docs/current-status.md)
+public/               # icons, oru-social-logo.png, guides/ (fallback photos)
 docs/                 # status, stack, architecture, roadmap, privacy, testing evidence
 ```
 
 ## Verification
 
 ```powershell
-pnpm exec tsc --noEmit   # type check — passes (exit 0)
-pnpm build               # production build — passes, / prerenders static
+pnpm exec tsc --noEmit   # type check — must pass (exit 0)
+pnpm build               # production build — requires Supabase env vars
 ```
 
 Evidence and screenshot verification: `docs/testing-results.md`.

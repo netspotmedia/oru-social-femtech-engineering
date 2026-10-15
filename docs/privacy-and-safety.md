@@ -3,13 +3,21 @@
 > Guidance notes, not legal advice and not a compliance certification. POPIA and
 > any other jurisdictional review by qualified counsel is still outstanding.
 
-## Current data posture (verified)
+## Current data posture (verified 15 Oct 2026)
 
-The prototype **collects, stores, and transmits no personal or health data**:
+The app **collects and stores no personal or health data**, but it is no
+longer fully self-contained:
 
-- No accounts, forms that submit, cookies set by the app, or local persistence.
+- No accounts, forms that submit, cookies set by the app beyond Supabase SSR
+  session plumbing, or local persistence of user input.
 - Search input never leaves the browser (client-side filter only).
-- Images and fonts are same-origin; no third-party requests are made by the page.
+- Guide content and `image_url` files load from Supabase at request/build
+  time. Remote guide images (plain `<img>`, no allowlist) create third-party
+  requests — confirm each image source and hosting region before publishing,
+  and never serve user-supplied URLs.
+- Published-only queries (`is_published = true`) limit exposure, but
+  enforcement for anonymous keys depends on RLS (proposal UNAPPLIED — see
+  `docs/current-status.md`). Drafts must be unreachable by the anon key.
 - `@vercel/analytics` (production only) measures page views; it is not fed any
   health information. Confirm hosting-region and retention settings before release.
 

@@ -39,7 +39,13 @@ export type ContentItem = {
 const contentItemSelect = 'id, slug, title, summary, content_type, read_time, image_url, body, category:content_categories(name)'
 
 export async function getPublishedGuides() {
-  const supabase = await createClient()
+  let supabase: Awaited<ReturnType<typeof createClient>>
+  try {
+    supabase = await createClient()
+  } catch (error) {
+    console.error('[oru] Supabase client init failed:', error instanceof Error ? error.message : error)
+    return { items: [], failed: true }
+  }
   const { data, error } = await supabase
     .from('content_items')
     .select(contentItemSelect)
@@ -50,14 +56,20 @@ export async function getPublishedGuides() {
 
   if (error) {
     console.error('[v0] Published guides query failed:', error.message)
-    return []
+    return { items: [], failed: true }
   }
 
-  return (data ?? []) as ContentItem[]
+  return { items: ((data ?? []) as ContentItem[]), failed: false }
 }
 
 export async function getPublishedContent(contentType?: ContentItem['content_type']) {
-  const supabase = await createClient()
+  let supabase: Awaited<ReturnType<typeof createClient>>
+  try {
+    supabase = await createClient()
+  } catch (error) {
+    console.error('[oru] Supabase client init failed:', error instanceof Error ? error.message : error)
+    return { items: [], failed: true }
+  }
   let query = supabase
     .from('content_items')
     .select(contentItemSelect)
@@ -70,14 +82,20 @@ export async function getPublishedContent(contentType?: ContentItem['content_typ
   const { data, error } = await query
   if (error) {
     console.error('[v0] Published content query failed:', error.message)
-    return []
+    return { items: [], failed: true }
   }
 
-  return (data ?? []) as ContentItem[]
+  return { items: ((data ?? []) as ContentItem[]), failed: false }
 }
 
 export async function getPublishedContentBySlug(slug: string) {
-  const supabase = await createClient()
+  let supabase: Awaited<ReturnType<typeof createClient>>
+  try {
+    supabase = await createClient()
+  } catch (error) {
+    console.error('[oru] Supabase client init failed:', error instanceof Error ? error.message : error)
+    return { item: null, failed: true }
+  }
   const { data, error } = await supabase
     .from('content_items')
     .select(contentItemSelect)
@@ -87,10 +105,10 @@ export async function getPublishedContentBySlug(slug: string) {
 
   if (error) {
     console.error('[v0] Content detail query failed:', error.message)
-    return null
+    return { item: null, failed: true }
   }
 
-  return (data ?? null) as ContentItem | null
+  return { item: ((data ?? null) as ContentItem | null), failed: false }
 }
 
 export function isContentType(value: string | null): value is ContentItem['content_type'] {
@@ -109,12 +127,16 @@ export function getGuideTime(item: ContentItem) {
   return item.read_time || 'Clinical guide'
 }
 
+// Content authoring convention (must be governed, see docs/current-status.md):
+// `body` line 1 = reviewer attribution, line 2 = evidence reference,
+// line 3 = image credit URL. Anything outside that format renders as plain
+// library text — never as a verified clinical claim.
 export function getGuideReviewer(item: ContentItem) {
-  return item.body?.split('\n')[0] || 'Reviewed by the ORU clinical editorial team'
+  return item.body?.split('\n')[0] || 'ORU content library'
 }
 
 export function getGuideReference(item: ContentItem) {
-  return item.body?.split('\n')[1] || 'ORU clinical evidence standard'
+  return item.body?.split('\n')[1] || 'Awaiting evidence-reference entry'
 }
 
 export function getGuideCreditUrl(item: ContentItem) {
@@ -145,8 +167,8 @@ export const emptyGuideCard: GuideCard = {
   creditUrl: 'https://oru.social',
   title: 'New clinical guides are being reviewed',
   summary: 'The ORU editorial team is preparing the next evidence-based resources for the library.',
-  reviewer: 'ORU clinical editorial team',
-  ref: 'ORU evidence standard',
+  reviewer: 'ORU content library',
+  ref: 'Awaiting evidence-reference entry',
 }
 
 export function normalizeGuides(items: ContentItem[]) {

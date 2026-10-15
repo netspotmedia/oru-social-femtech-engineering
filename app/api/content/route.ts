@@ -7,6 +7,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unsupported content type.' }, { status: 400 })
   }
 
-  const items = await getPublishedContent(type && isContentType(type) ? type : undefined)
+  const { items, failed } = await getPublishedContent(type && isContentType(type) ? type : undefined)
+  if (failed) {
+    return NextResponse.json({ error: 'Content service unavailable.' }, { status: 503 })
+  }
   return NextResponse.json({ items }, { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } })
 }
