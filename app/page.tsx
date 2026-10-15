@@ -98,7 +98,7 @@ export default function Page() {
             <a href="#ai-navigator" className="rounded-lg px-3 py-2 text-[#3f4947] hover:bg-[#e0f1f5]">AI Navigator</a>
           </nav>
           <div className="flex items-center gap-2">
-            <a href="#domains" className="hidden rounded-lg bg-[#004340] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#0d5c58] sm:inline-flex">Find Care</a>
+            <a href="#domains" className="hidden rounded-lg bg-[#0d5c58] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#09423f] sm:inline-flex">Find Care</a>
             <button className="rounded-lg p-2 lg:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -115,30 +115,31 @@ export default function Page() {
               ].map(([label, href]) => (
                 <a key={label} href={href} onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2.5 hover:bg-[#e0f1f5]">{label}</a>
               ))}
-              <a href="#domains" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-[#004340] px-3 py-2.5 text-center text-white">Find Care</a>
+              <a href="#domains" onClick={() => setMenuOpen(false)} className="mt-2 rounded-lg bg-[#0d5c58] px-3 py-2.5 text-center text-white hover:bg-[#09423f]">Find Care</a>
             </div>
           </nav>
         )}
       </header>
 
       {/* Hero */}
-      <section id="top" className="relative overflow-hidden px-4 pb-10 pt-12 lg:px-8 lg:pt-16">
-        <div className="absolute -top-28 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-[#abefe9]/25 blur-3xl" aria-hidden />
+      <section id="top" className="relative overflow-hidden px-4 pb-16 pt-16 lg:px-8 lg:pb-24 lg:pt-24">
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(#0d5c58_1px,transparent_1px)] opacity-[0.08] [background-size:22px_22px]" />
+        <div aria-hidden className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white to-transparent" />
         <div className="relative mx-auto max-w-4xl text-center">
-          <p className="inline-flex items-center gap-2 rounded-full bg-[#e0f1f5] px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#004340]">
+          <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#004340] ring-1 ring-[#d5e5e9]">
             <ShieldCheck size={14} /> SASOG &amp; HPCSA-Aligned Reproductive Care Infrastructure
           </p>
-          <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">Evidence-based women&apos;s health, designed for clarity, trust &amp; dignity.</h1>
-          <p className="mx-auto mt-4 max-w-2xl leading-7 text-[#3f4947]">Access clinically peer-reviewed reproductive education, discover verified South African medical specialists, and navigate symptoms with safely bounded clinical AI.</p>
+          <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl">Evidence-based women&apos;s health, designed for clarity, trust &amp; dignity.</h1>
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#3f4947] sm:text-lg">Access clinically peer-reviewed reproductive education, discover verified South African medical specialists, and navigate symptoms with safely bounded clinical AI.</p>
 
-          <form className="mx-auto mt-6 flex max-w-2xl flex-col gap-2 sm:flex-row" role="search" onSubmit={(e) => { e.preventDefault(); scrollToDomains() }}>
+          <form className="mx-auto mt-8 flex max-w-2xl flex-col gap-2 sm:flex-row" role="search" onSubmit={(e) => { e.preventDefault(); scrollToDomains() }}>
             <label className="relative flex-1">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6f7978]" />
               <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search symptoms, conditions, or specialists (e.g. Endometriosis, Pelvic Pain, IVF)" aria-label="Search symptoms, conditions or specialists" className="h-12 w-full rounded-lg border border-[#d5e5e9] bg-white pl-10 pr-3 text-sm outline-none placeholder:text-[#6f7978] focus:border-[#0d5c58] focus:ring-2 focus:ring-[#0d5c58]" />
             </label>
             <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0d5c58] px-6 text-sm font-bold text-white hover:bg-[#09423f]">Find Care <ArrowRight size={16} /></button>
           </form>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-[#3f4947]">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-[#3f4947]">
             <span className="font-bold">Popular:</span>
             {popularSearches.map((s) => (
               <button key={s.label} type="button" onClick={() => { setQuery(s.query); scrollToDomains() }} className="font-semibold text-[#004340] hover:underline">{s.label}</button>
@@ -147,19 +148,13 @@ export default function Page() {
             <button type="button" onClick={() => document.getElementById('providers')?.scrollIntoView({ behavior: 'smooth' })} className="font-semibold text-[#004340] hover:underline">Find Gynaecologist</button>
           </div>
 
-          <dl className="mx-auto mt-8 grid max-w-2xl grid-cols-3 gap-4">
-            {[
-              ['1,420+', 'HPCSA-Verified Specialists'],
-              ['380+', 'Peer-Reviewed Guides'],
-              ['100%', 'Non-Commercial Standard'],
-            ].map(([stat, label]) => (
-              <div key={label}>
-                <dt className="sr-only">{label}</dt>
-                <dd className="text-3xl font-bold text-[#004340]">{stat}</dd>
-                <dd className="mt-1 text-xs text-[#3f4947]">{label}</dd>
-              </div>
-            ))}
-          </dl>
+          <div aria-label="Guidance sources" className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#6f7978]">
+            <span>Informed by SASOG guidance</span>
+            <span aria-hidden className="h-1 w-1 rounded-full bg-[#6f7978]/40" />
+            <span>RCOG &amp; WHO references</span>
+            <span aria-hidden className="h-1 w-1 rounded-full bg-[#6f7978]/40" />
+            <span>POPIA-aware · Non-commercial</span>
+          </div>
         </div>
       </section>
 
@@ -180,6 +175,20 @@ export default function Page() {
               ))}
             </div>
           </div>
+          <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-y border-[#e3ecec] py-4">
+            {[
+              ['1,420+', 'HPCSA-Verified Specialists'],
+              ['380+', 'Peer-Reviewed Guides'],
+              ['100%', 'Non-Commercial Standard'],
+            ].map(([stat, label]) => (
+              <div key={label} className="flex items-baseline gap-2">
+                <dt className="sr-only">{label}</dt>
+                <dd className="text-2xl font-bold tracking-tight text-[#004340]">{stat}</dd>
+                <dd className="text-xs text-[#3f4947]">{label}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-2 text-[11px] text-[#6f7978]">Illustrative prototype figures from the design mockup, not live registry data.</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredDomains.map((d) => (
               <article key={d.name} className="flex flex-col rounded-xl border border-[#e3ecec] bg-white p-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition hover:-translate-y-1 hover:shadow-md">
